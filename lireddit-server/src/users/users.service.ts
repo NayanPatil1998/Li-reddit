@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { hash, verify } from 'argon2';
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
+import { COOKIE_NAME } from 'src/utils/constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,6 +23,7 @@ export class UsersService {
       }
       // user.password = await hash(user.password);
       await user.save();
+      request.session.userId = user.id.toString();
       return response.status(200).json({ user });
     } catch (error) {
       console.log(error);
@@ -81,8 +83,30 @@ export class UsersService {
         ],
       });
     }
+    request.session.userId = user.id.toString();
 
     return response.status(200).json({ user });
+  }
+
+  async logout(response: Response, request: Request) {
+    const isDone = new Promise((resolve) =>
+      request.session.destroy((err: any) => {
+        response.clearCookie(COOKIE_NAME);
+        if (err) {
+          console.log(err);
+
+          resolve(false);
+          return response.status(401).json({
+            message: 'unauthenticated',
+          });
+        }
+        resolve(true);
+      }),
+    );
+    if (await isDone)
+      return response.status(200).json({
+        message: 'succes',
+      });
   }
 
   findAll(): Promise<User[]> {

@@ -16,7 +16,7 @@ import { Request, Response } from 'express';
 import { LoginUserDto } from './dto/login-user.dto';
 import { request } from 'http';
 
-@Controller('users')
+@Controller('auth')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -38,23 +38,13 @@ export class UsersController {
     return this.usersService.login(loginUserDto, response, request);
   }
 
-  @Get()
+  @Get('/users')
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Post('/logout')
+  logout(@Res() response: Response, @Req() request: Request) {
+    return this.usersService.logout(response, request);
   }
 }
