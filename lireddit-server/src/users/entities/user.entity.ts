@@ -50,7 +50,7 @@ export class User extends BaseEntity {
     this.password = await hash(this.password);
   }
 
-  toJSON(){
-    return classToPlain(this)
+  toJSON() {
+    return classToPlain(this);
   }
 }

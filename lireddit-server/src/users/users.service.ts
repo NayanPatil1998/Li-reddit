@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { hash } from 'argon2';
+import { hash, verify } from 'argon2';
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  async create(
+  async register(
     createUserDto: CreateUserDto,
     response: Response,
+    request: Request,
   ): Promise<User | Response> {
     const user = User.create(createUserDto);
     const errors = await registerValidation(user);
@@ -44,6 +46,43 @@ export class UsersService {
           });
         }
     }
+  }
+
+  async login(
+    { emailOrUsername, password }: LoginUserDto,
+    response: Response,
+    request: Request,
+  ): Promise<User | Response> {
+    const user = await User.findOne(
+      emailOrUsername.includes('@')
+        ? { where: { email: emailOrUsername } }
+        : {
+            where: { username: emailOrUsername },
+          },
+    );
+    if (!user) {
+      return response.status(401).json({
+        errors: [
+          {
+            field: 'emailOrUsername',
+            message: `User with ${emailOrUsername} does not exist`,
+          },
+        ],
+      });
+    }
+    const valid = await verify(user.password, password);
+    if (!valid) {
+      return response.status(401).json({
+        errors: [
+          {
+            field: 'password',
+            message: `Wrong password`,
+          },
+        ],
+      });
+    }
+
+    return response.status(200).json({ user });
   }
 
   findAll(): Promise<User[]> {
