@@ -5,12 +5,13 @@ import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import cors from 'cors';
 import { COOKIE_NAME, __prod__ } from './utils/constants';
+import User from './users/entities/user.entity';
 
 const redisStore = connectRedis(session);
 const redis = new Redis();
 declare module 'express-session' {
   export interface SessionData {
-    userId: string;
+    user: User;
   }
 }
 async function bootstrap() {

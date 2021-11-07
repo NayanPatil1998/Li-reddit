@@ -6,7 +6,7 @@ import { COOKIE_NAME } from 'src/utils/constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import User from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +23,7 @@ export class UsersService {
       }
       // user.password = await hash(user.password);
       await user.save();
-      request.session.userId = user.id.toString();
+      request.session.user = user;
       return response.status(200).json({ user });
     } catch (error) {
       console.log(error);
@@ -83,7 +83,7 @@ export class UsersService {
         ],
       });
     }
-    request.session.userId = user.id.toString();
+    request.session.user = user;
 
     return response.status(200).json({ user });
   }

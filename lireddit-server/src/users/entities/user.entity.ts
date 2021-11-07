@@ -1,29 +1,18 @@
-import {
-  IsAlphanumeric,
-  IsEmail,
-  isEmail,
-  Min,
-  MinLength,
-} from 'class-validator';
 import { hash } from 'argon2';
+import { Exclude } from 'class-transformer';
+import { IsEmail, MinLength } from 'class-validator';
+import Entity from 'src/Entity.abstract';
+import Post from 'src/posts/entities/post.entity';
 import {
-  BaseEntity,
   BeforeInsert,
   Column,
-  CreateDateColumn,
-  Entity,
+  Entity as ToEntity,
   Index,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { classToPlain, Exclude } from 'class-transformer';
 
-@Entity()
-export class User extends BaseEntity {
-  @Exclude()
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@ToEntity('users')
+export default class User extends Entity {
   @Index()
   @IsEmail()
   @Column({ unique: true })
@@ -39,18 +28,11 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password);
-  }
-
-  toJSON() {
-    return classToPlain(this);
   }
 }
