@@ -31,4 +31,31 @@ export class PostsService {
       });
     }
   }
+
+  async fetchPosts(response: Response): Promise<Response> {
+    try {
+      const posts = await Post.find({
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+      return response.status(200).json(posts);
+    } catch (error) {
+      console.log(error);
+      return response.status(500).json(error);
+    }
+  }
+
+  async fetchPost(response: Response, slug: string, identifier: string) {
+    try {
+      const post = await Post.findOneOrFail(
+        { slug, identifier },
+        { relations: ['sub'] },
+      );
+      return response.status(200).json(post);
+    } catch (error) {
+      console.log(error);
+      return response.status(404).json({ error: 'post not found' });
+    }
+  }
 }

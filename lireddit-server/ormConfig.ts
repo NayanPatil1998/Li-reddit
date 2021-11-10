@@ -5,7 +5,7 @@ const ormConfig: TypeOrmModuleOptions = {
   database: 'lireddit',
   username: 'postgres',
   logging: true,
-  synchronize: true,
+  synchronize: false,
   entities: ['dist/src/**/entities/*.entity.js'],
   autoLoadEntities: true,
   migrations: ['./dist/src/db/migrations/*{.ts,.js}'],

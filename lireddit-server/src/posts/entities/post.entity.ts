@@ -1,3 +1,4 @@
+import Comment from 'src/comments/entities/comment.entity';
 import Entity from 'src/Entity.abstract';
 import Subreddit from 'src/subreddits/entities/subreddit.entity';
 import User from 'src/users/entities/user.entity';
@@ -10,6 +11,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 @ToEntity('posts')
@@ -37,6 +39,9 @@ export default class Post extends Entity {
 
   @Column()
   subName: string;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
   @BeforeInsert()
   makeIdAndSlug() {
