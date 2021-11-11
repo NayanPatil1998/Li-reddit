@@ -50,7 +50,7 @@ export class PostsService {
     try {
       const post = await Post.findOneOrFail(
         { slug, identifier },
-        { relations: ['sub'] },
+        { relations: ['sub', 'comments'] },
       );
       return response.status(200).json(post);
     } catch (error) {

@@ -19,12 +19,11 @@ export class CommentsService {
         identifier,
       });
 
-      const comment = new Comment({
+      const comment = Comment.create({
         body,
         post,
         user: request.session.user,
       });
-
       await comment.save();
 
       return response.status(200).json(post);
