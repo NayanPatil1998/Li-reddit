@@ -17,7 +17,7 @@ export default class Comment extends Entity {
   @Column()
   identifier: string;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ nullable: false, type: 'text' })
   body: string;
 
   @Column()

@@ -16,7 +16,7 @@ export default class Subreddit extends Entity {
   @Column({ unique: true })
   name: string;
 
-  @Column()
+  @Column({ nullable: false })
   title: string;
 
   @Column({ type: 'text', nullable: true })

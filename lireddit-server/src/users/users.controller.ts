@@ -33,6 +33,7 @@ export class UsersController {
     @Res() response: Response,
     @Req() request: Request,
   ) {
+    console.log('Entered');
     return this.usersService.login(loginUserDto, response, request);
   }
 

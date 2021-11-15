@@ -19,7 +19,7 @@ export class UsersService {
     const errors = await registerValidation(user);
     try {
       if (errors.length > 0) {
-        return response.status(400).json({ errors });
+        return response.json({ errors });
       }
       // user.password = await hash(user.password);
       await user.save();
@@ -29,7 +29,7 @@ export class UsersService {
       console.log(error);
       if (error.detail.includes('already exists'))
         if (error.detail.includes('(username)')) {
-          return response.status(400).json({
+          return response.json({
             errors: [
               {
                 field: 'username',
@@ -38,7 +38,7 @@ export class UsersService {
             ],
           });
         } else {
-          return response.status(400).json({
+          return response.json({
             errors: [
               {
                 field: 'email',
@@ -63,7 +63,7 @@ export class UsersService {
           },
     );
     if (!user) {
-      return response.status(401).json({
+      return response.json({
         errors: [
           {
             field: 'emailOrUsername',
@@ -74,7 +74,7 @@ export class UsersService {
     }
     const valid = await verify(user.password, password);
     if (!valid) {
-      return response.status(401).json({
+      return response.json({
         errors: [
           {
             field: 'password',

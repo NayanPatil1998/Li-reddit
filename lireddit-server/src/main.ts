@@ -17,12 +17,13 @@ declare module 'express-session' {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // app.use(
-  //   cors({
-  //     origin: "http://localhost:3000",
-  //     credentials: true,
-  //   })
-  // );
+  app.use(
+    cors({
+      origin: 'http://localhost:4000',
+      credentials: true,
+      optionsSuccessStatus: 200,
+    }),
+  );
 
   app.use(
     session({
@@ -33,7 +34,6 @@ async function bootstrap() {
         httpOnly: true,
         sameSite: 'lax', //CSEF
         secure: __prod__,
-        path: '/',
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET_KEY,
