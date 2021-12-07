@@ -3,7 +3,7 @@ import { Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { login } from "../api/authApi";
 import { toErrorMap } from "../utils/toErrorMap";
 import InputTextField from "./InputTextField";
@@ -12,6 +12,7 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = ({}) => {
   const router = useRouter()
   const {isLoading, isError, error, mutate} = useMutation(login)
+  const queryClient = useQueryClient()
 
   return (
     <Box minW="sm">
@@ -33,6 +34,7 @@ const Login: React.FC<LoginProps> = ({}) => {
                 if (data.data?.errors) {
                   setErrors(toErrorMap(data.data.errors as []));
                 } else if (data.data.user) {
+                  queryClient.invalidateQueries('me')
                   router.push("/");
                 }
               }

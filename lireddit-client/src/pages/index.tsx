@@ -1,11 +1,20 @@
-import { FC } from "react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import React, { FC } from "react";
 import { Container } from "../components/Container";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
+import PostsSection from "../components/PostsSection";
+import MenuSidebar from "../components/Sidebar/MenuSidebar";
 
-const Index: FC = () => (
-  <Container height="100vh">
-    <DarkModeSwitch />
-  </Container>
-);
+const Index: FC = () => {
 
+  return (
+    <Container display="flex">
+        <MenuSidebar />
+        <PostsSection />
+        <Box display={{
+          base:"none",
+          lg: "block"
+        }} width="25em"></Box>
+    </Container>
+  );
+};
 export default Index;

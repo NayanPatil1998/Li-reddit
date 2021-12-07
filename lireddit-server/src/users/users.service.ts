@@ -1,5 +1,5 @@
-import { Injectable, Req } from '@nestjs/common';
-import { hash, verify } from 'argon2';
+import { Injectable } from '@nestjs/common';
+import { verify } from 'argon2';
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import { COOKIE_NAME } from 'src/utils/constants';
@@ -113,16 +113,13 @@ export class UsersService {
     return User.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  me(request: Request, response: Response): Response {
+    const user: User | undefined = request.session.user;
+    return response.json(user);
   }
 }
 

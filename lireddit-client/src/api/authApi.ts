@@ -1,3 +1,4 @@
+import { User } from "../types/user"
 import { axios } from "./axios"
 
 export const register = async ({username, email, password}) => {
@@ -14,4 +15,12 @@ export const login = async ({emailOrUsername, password}) => {
         "password" : password,
     })
     return response
+}
+export const logout = async () => {
+    const response = await axios.post('/auth/logout',{})
+    return response.data
+}
+export const me = async () => {
+    const response = await axios.get<User>("/auth/me");
+    return response.data;
 }

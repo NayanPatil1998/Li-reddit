@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
 import { CreatePostDto } from './dto/creat-post.dto';
 import { PostsService } from './posts.service';
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 
 @Controller()
 export class PostsController {
@@ -17,8 +17,8 @@ export class PostsController {
   }
 
   @Get('posts')
-  getPosts(@Res() response: Response) {
-    return this.postsService.fetchPosts(response);
+  getPosts(@Res() response: Response, @Req() request: Request) {
+    return this.postsService.fetchPosts(response, request);
   }
 
   @Get('/post/:identifier/:slug')

@@ -32,13 +32,19 @@ export class PostsService {
     }
   }
 
-  async fetchPosts(response: Response): Promise<Response> {
+  async fetchPosts(response: Response, request: Request): Promise<Response> {
     try {
       const posts = await Post.find({
         order: {
           createdAt: 'DESC',
         },
+        relations: ['sub', 'comments', 'votes'],
       });
+
+      if (request.session.user) {
+        posts.forEach((p) => p.setUserVote(request.session.user));
+      }
+
       return response.status(200).json(posts);
     } catch (error) {
       console.log(error);
@@ -50,7 +56,7 @@ export class PostsService {
     try {
       const post = await Post.findOneOrFail(
         { slug, identifier },
-        { relations: ['sub', 'comments'] },
+        { relations: ['sub', 'comments', 'votes'] },
       );
       return response.status(200).json(post);
     } catch (error) {

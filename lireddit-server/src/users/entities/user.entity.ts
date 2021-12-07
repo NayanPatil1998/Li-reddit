@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 import { IsEmail, MinLength } from 'class-validator';
 import Entity from 'src/Entity.abstract';
 import Post from 'src/posts/entities/post.entity';
+import Vote from 'src/votes/entities/vote.entity';
 import {
   BeforeInsert,
   Column,
@@ -30,6 +31,9 @@ export default class User extends Entity {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 
   @BeforeInsert()
   async hashPassword() {

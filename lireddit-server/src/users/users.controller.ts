@@ -42,6 +42,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('/me')
+  me(@Res() response: Response, @Req() request: Request) {
+    return this.usersService.me(request, response);
+  }
+
   @Post('/logout')
   logout(@Res() response: Response, @Req() request: Request) {
     return this.usersService.logout(response, request);

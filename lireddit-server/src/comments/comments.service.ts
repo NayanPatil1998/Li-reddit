@@ -26,7 +26,7 @@ export class CommentsService {
       });
       await comment.save();
 
-      return response.status(200).json(post);
+      return response.status(200).json(comment);
     } catch (error) {
       console.log(error);
       return response.status(404).json({ error: 'post not found' });
