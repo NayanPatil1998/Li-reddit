@@ -8,8 +8,9 @@ import { Post } from "../types/post";
 import Link from "next/link";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { votePost } from "../api/postApi";
+import { me } from "../api/authApi";
 
 dayjs.extend(relativeTime);
 
@@ -19,6 +20,7 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ post }) => {
   const bgColor = useColorModeValue("white", "#1a1a1b");
   const queryClient = useQueryClient()
+  const { data: user } = useQuery("me", me);
 
 
   const {isLoading, isError, error, mutate} = useMutation(votePost)
@@ -50,8 +52,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
           md:"column"
         }} alignItems="center" >
           <IconButton
-          onClick={() => vote(1)}
-          borderRadius="3xl" bgColor={post.userVote === 1 && "#fe4500"} aria-label="Search database" _hover={{
+          onClick={() =>  user &&  vote(1)}
+          borderRadius="3xl" bgColor={post.userVote === 1 && "#fe4500"} color={post.userVote === 1 && "white"} aria-label="Search database" _hover={{
             bgColor:"#fe4500",
             color:"white"
           }} icon={<GoArrowUp />} />
@@ -59,7 +61,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
           <Text fontSize="md">{post.voteScore}</Text>
           <Box height="3" width="3" />
 
-          <IconButton onClick={() => vote(-1)} borderRadius="3xl" bgColor={post.userVote === -1 && "blue"} aria-label="Search database" _hover={{
+          <IconButton onClick={() => user && vote(-1)} borderRadius="3xl" bgColor={post.userVote === -1 && "blue"} color={post.userVote === -1 && "white"} aria-label="Search database" _hover={{
             bgColor:"blue",
             color:"white"
 
