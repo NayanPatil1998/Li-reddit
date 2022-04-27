@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import Entity from 'src/Entity.abstract';
 import Post from 'src/posts/entities/post.entity';
 import User from 'src/users/entities/user.entity';
@@ -34,6 +35,10 @@ export default class Comment extends Entity {
 
   @OneToMany(() => Vote, (vote) => vote.comment)
   votes: Vote[];
+
+  @Expose() get voteScore(): number {
+    return this.votes?.reduce((prev, curr) => prev + (curr.value || 0), 0);
+  }
 
   protected userVote: number;
   setUserVote(user: User) {

@@ -33,6 +33,27 @@ export class CommentsService {
     }
   }
 
+  async getCommentsByPost(request: Request, response: Response) {
+    const { identifier, slug } = request.params
+
+    try {
+      const post = await Post.findOneOrFail({ identifier, slug })
+
+      const comments = await Comment.find({ where: { post }, order: { createdAt: "DESC" }, relations: ['votes'] })
+
+      if (request.session.user) {
+        comments.forEach((p) => p.setUserVote(request.session.user));
+      }
+
+      response.json(comments)
+
+    } catch (error) {
+      console.log(error)
+      response.status(500).json({error: error.message})
+    }
+
+  }
+
   findAll() {
     return `This action returns all comments`;
   }

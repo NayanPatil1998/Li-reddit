@@ -16,7 +16,7 @@ import { Request, Response } from 'express';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+  constructor(private readonly commentsService: CommentsService) { }
 
   @Post('create')
   create(
@@ -27,9 +27,10 @@ export class CommentsController {
     return this.commentsService.create(createCommentDto, request, response);
   }
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  @Get(':identifier/:slug')
+  getCommentsByPost(@Res() response: Response,
+    @Req() request: Request) {
+    return this.commentsService.getCommentsByPost(request, response);
   }
 
   @Get(':id')

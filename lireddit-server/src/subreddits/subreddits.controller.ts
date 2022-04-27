@@ -12,11 +12,12 @@ import {
 import { SubredditsService } from './subreddits.service';
 import { CreateSubredditDto } from './dto/create-subreddit.dto';
 import { UpdateSubredditDto } from './dto/update-subreddit.dto';
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
+import { request } from 'http';
 
 @Controller('subreddits')
 export class SubredditsController {
-  constructor(private readonly subredditsService: SubredditsService) {}
+  constructor(private readonly subredditsService: SubredditsService) { }
 
   @Post('create')
   create(
@@ -27,15 +28,22 @@ export class SubredditsController {
     return this.subredditsService.create(createSubredditDto, request, response);
   }
 
-  @Get()
-  findAll() {
-    return this.subredditsService.findAll();
+  @Get('/topsubs')
+  findAll(@Res() response: Response,
+    @Req() request: Request,) {
+    return this.subredditsService.getTopSubs(request, response);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subredditsService.findOne(+id);
+  @Get(':name')
+  findOne(@Param('name') name: string, @Req() request: Request, @Res() response: Response) {
+    return this.subredditsService.findOne(name, request, response);
   }
+
+  @Post(":name/image")
+  uploadImage(@Param('name') name: string, @Req() request: Request, @Res() response: Response) {
+    return this.subredditsService.uploadSubImage(request, response)
+  }
+
 
   @Patch(':id')
   update(

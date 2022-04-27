@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import s from 'connect-redis';
 import { Request, Response } from 'express';
+import fs from 'fs';
+import { getConnection } from 'typeorm';
+import Post from './../posts/entities/post.entity';
 import { CreateSubredditDto } from './dto/create-subreddit.dto';
 import { UpdateSubredditDto } from './dto/update-subreddit.dto';
 import Subreddit from './entities/subreddit.entity';
@@ -61,13 +65,91 @@ export class SubredditsService {
     }
   }
 
-  findAll() {
-    return `This action returns all subreddits`;
+  async getTopSubs (request: Request, response: Response): Promise<Response>{
+    try {
+      const imageUrlExp = `COALESCE('http://localhost:3000/images/' || s."imageUrn" , 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')`
+    const subs = await getConnection()
+      .createQueryBuilder()
+      .select(
+        `s.title, s.name, ${imageUrlExp} as "imageUrl", count(p.id) as "postCount"`
+      )
+      .from(Subreddit, 's')
+      .leftJoin(Post, 'p', `s.name = p."subName"`)
+      .groupBy('s.title, s.name, "imageUrl"')
+      .orderBy(`"postCount"`, 'DESC')
+      .limit(5)
+      .execute()
+
+      return response.json(subs)
+    } catch (error) {
+      return response.status(500).json({error : error})
+      
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subreddit`;
+  async findOne(name: string, request: Request, response: Response): Promise<Response> {
+    try {
+      const sub = await Subreddit.findOneOrFail({ name })
+      const posts = await Post.find({
+        where: { sub }, order: {
+          createdAt: 'DESC',
+        }, relations: ['comments', 'votes']
+      })
+
+      sub.posts = posts
+
+      if (request.session.user) {
+        sub.posts.forEach((post) => {
+          post.setUserVote(request.session.user)
+        })
+      }
+
+      return response.status(200).json(sub)
+
+    } catch (err) {
+      // console.error(err)
+      return response.status(404).json({
+        message: 'Something went wrong!',
+      });
+    }
   }
+
+  async uploadSubImage(req: Request, res: Response) {
+    const sub: Subreddit = res.locals.sub
+    try {
+      const type = req.body.type
+      console.log(req.file)
+
+      if (type !== 'image' && type !== 'banner') {
+        fs.unlinkSync(req.file.path)
+        return res.status(400).json({ error: 'Invalid type' })
+      }
+
+      let oldImageUrn: string = ''
+      if (type === 'image') {
+        oldImageUrn = sub.imageUrn ?? ''
+        sub.imageUrn = req.file.filename
+      } else if (type === 'banner') {
+        oldImageUrn = sub.bannerUrn ?? ''
+        sub.bannerUrn = req.file.filename
+      }
+      await sub.save()
+
+      if (oldImageUrn !== '') {
+        fs.unlinkSync(`public/images/${oldImageUrn}`)
+      }
+
+      return res.json(sub)
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  }
+
+
+
+
+
 
   update(id: number, updateSubredditDto: UpdateSubredditDto) {
     return `This action updates a #${id} subreddit`;
@@ -77,3 +159,5 @@ export class SubredditsService {
     return `This action removes a #${id} subreddit`;
   }
 }
+
+

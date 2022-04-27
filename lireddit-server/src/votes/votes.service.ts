@@ -57,6 +57,10 @@ export class VotesService {
       post.comments.forEach((c) => c.setUserVote(user));
 
       return res.json(post);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err.message)
+      return res.status(500).json({error : err.message});
+
+    }
   }
 }

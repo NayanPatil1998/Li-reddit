@@ -4,6 +4,8 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import cors from 'cors';
+
+import express  from "express"
 import { COOKIE_NAME, __prod__ } from './utils/constants';
 import User from './users/entities/user.entity';
 
@@ -19,11 +21,14 @@ async function bootstrap() {
 
   app.use(
     cors({
+  
       origin: 'http://localhost:4000',
       credentials: true,
       optionsSuccessStatus: 200,
     }),
   );
+
+  app.use(express.static('public'))
 
   app.use(
     session({

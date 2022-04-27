@@ -1,3 +1,6 @@
+import { Comment } from "./Comment";
+import { SubReddit } from "./sub";
+
 export interface Post {
     identifier: string;
 
@@ -13,8 +16,8 @@ export interface Post {
     voteScore: number
 
     subName: string;
-
-    comments: any;
+    sub : SubReddit
+    comments: Comment[];
     userVote : number
 
     createdAt: Date;

@@ -22,9 +22,9 @@ export class PostsController {
   }
 
   @Get('/post/:identifier/:slug')
-  getPost(@Param() params, @Res() response: Response) {
+  getPost(@Param() params, @Res() response: Response, @Req() request: Request) {
     const { identifier, slug } = params;
     // console.log(identifier, slug);
-    return this.postsService.fetchPost(response, slug, identifier);
+    return this.postsService.fetchPost(response, slug, identifier, request);
   }
 }

@@ -8,6 +8,7 @@ const ormConfig: TypeOrmModuleOptions = {
   synchronize: false,
   entities: ['dist/src/**/entities/*.entity.js'],
   autoLoadEntities: true,
+  
   migrations: ['./dist/src/db/migrations/*{.ts,.js}'],
   cli: {
     migrationsDir: './src/db/migrations',

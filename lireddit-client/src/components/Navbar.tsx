@@ -15,7 +15,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { AiFillMessage, AiOutlineUser } from "react-icons/ai";
-import NextLink from "next/link"
+import NextLink from "next/link";
 import React from "react";
 import Image from "next/image";
 import { ChevronDownIcon, PhoneIcon, SearchIcon } from "@chakra-ui/icons";
@@ -35,8 +35,20 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  if (isLoading) {
+    return <Box></Box>;
+  }
+
+  if (isError ) {
+    return (
+      <Box>
+       
+      </Box>
+    )
+  }
+
   return (
-    <Box as="nav" width="100%" bgColor={bgColorMode}>
+    <Box as="nav" width="100%" bgColor={bgColorMode} position="sticky">
       <Flex
         p="3"
         justifyContent={{
@@ -44,20 +56,22 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           xl: "space-between",
         }}
       >
-        <Flex>
-          <Image width="40px" height="35px" src="/images/reddit-logo.png" />
-          <Spacer width="2" />
-          <Text
-            display={{
-              base: "none",
-              md: "block",
-            }}
-            fontWeight="semibold"
-            fontSize="2xl"
-          >
-            Lireddit
-          </Text>
-        </Flex>
+        <NextLink href="/auth" as="/auth">
+          <Flex style={{ cursor: "pointer" }}>
+            <Image width="40px" height="35px" src="/images/reddit-logo.png" />
+            <Spacer width="2" />
+            <Text
+              display={{
+                base: "none",
+                md: "block",
+              }}
+              fontWeight="semibold"
+              fontSize="2xl"
+            >
+              Lireddit
+            </Text>
+          </Flex>
+        </NextLink>
         <InputGroup
           width={{
             base: "13em",
@@ -76,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             bgColor={searchInputBgColorMode}
           />
         </InputGroup>
-        {user ? (
+        {user.data ? (
           <Flex
             alignItems="center"
             display={{
@@ -132,14 +146,14 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
               <DarkModeSwitch />
               <NextLink href="/auth" as="/auth">
                 <Link>
-                <PrimaryButton width="32" isBgDark={true} text="Log in" />
+                  <PrimaryButton width="32" isBgDark={true} text="Log in" />
                 </Link>
               </NextLink>
               <Spacer width="5" />
               <NextLink href="/auth">
-             <Link>
-             <PrimaryButton width="32" isBgDark={false} text="Sign up" />
-             </Link>
+                <Link>
+                  <PrimaryButton width="32" isBgDark={false} text="Sign up" />
+                </Link>
               </NextLink>
               <Spacer width="5" />
             </Box>

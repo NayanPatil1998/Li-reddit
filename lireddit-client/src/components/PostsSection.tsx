@@ -11,7 +11,7 @@ const PostsSection: React.FC<PostsSectionProps> = ({}) => {
   const buttonTextColorMode = useColorModeValue("primary", "white");
 
   const { isLoading, isError, data, error, isFetched } = useQuery("posts", getPosts);
-  console.log(data)
+  // console.log(data)
   return (
     <Box
       width={{
@@ -21,11 +21,11 @@ const PostsSection: React.FC<PostsSectionProps> = ({}) => {
       p="4"
     >
       {isLoading || error || !isFetched ? (
-        <div></div>
+        <div>{error}</div>
       ) : (
         <VStack>
-          {data && data.map((post) => {
-           return <Post key={post.identifier} post={post} />;
+          {data && data.data.map((post) => {
+           return <Post key={post.identifier} post={post}  />;
           })}
         </VStack>
       )}

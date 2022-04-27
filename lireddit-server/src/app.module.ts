@@ -16,6 +16,8 @@ import { UsersModule } from './users/users.module';
 import { SubredditsModule } from './subreddits/subreddits.module';
 import { CommentsModule } from './comments/comments.module';
 import { VotesModule } from './votes/votes.module';
+import { OwnSubMiddleware } from './middlewares/own-sub.middleware';
+import { upload } from './utils/multerUpload';
 
 @Module({
   imports: [
@@ -35,7 +37,8 @@ export class AppModule implements NestModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes({ path: 'posts', method: RequestMethod.POST });
-    consumer.apply(AuthMiddleware).forRoutes('subreddits');
-    consumer.apply(AuthMiddleware).forRoutes('comments');
+    consumer.apply(AuthMiddleware).forRoutes({ path: 'subreddits', method: RequestMethod.POST });
+    consumer.apply(AuthMiddleware).forRoutes({ path: 'comments', method: RequestMethod.POST } );
+    consumer.apply(AuthMiddleware, OwnSubMiddleware, upload.single('file')).forRoutes({ path: 'subreddits/:name/image', method: RequestMethod.POST })
   }
 }

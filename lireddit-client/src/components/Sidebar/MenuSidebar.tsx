@@ -9,6 +9,8 @@ interface MenuSidebarProps {}
 const MenuSidebar: React.FC<MenuSidebarProps> = ({}) => {
   return (
     <Box
+
+    
         // zIndex={{
         //     base: "-1",
         //     xl: '1'
@@ -24,7 +26,7 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({}) => {
       }}
       position={{
         base: "fixed",
-        xl: "inherit",
+        xl: "sticky",
       }}
       bottom={{ base: "0px" }}
       p={5 }

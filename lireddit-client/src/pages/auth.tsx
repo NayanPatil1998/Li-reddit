@@ -7,6 +7,7 @@ import Login from "../components/Login";
 import { useQuery } from "react-query";
 import { me } from "../api/authApi";
 import { useRouter } from "next/router";
+import Head from "next/head";
 interface AuthProps {}
 const Auth: React.FC<AuthProps> = ({}) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -29,8 +30,12 @@ const Auth: React.FC<AuthProps> = ({}) => {
       </Flex>
     );
 
-  if (user) router.replace("/");
-  return !user && (
+  if (user.data) router.replace("/");
+  return !user.data && (
+    <>
+     <Head>
+      <title>Login | Lireddit</title>
+    </Head>
     <Box
       justifyContent="center"
       alignItems="center"
@@ -68,6 +73,7 @@ const Auth: React.FC<AuthProps> = ({}) => {
         </Box>
       </Box>
     </Box>
+    </>
   );
 };
 export default Auth;

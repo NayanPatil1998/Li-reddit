@@ -52,12 +52,17 @@ export class PostsService {
     }
   }
 
-  async fetchPost(response: Response, slug: string, identifier: string) {
+  async fetchPost(response: Response, slug: string, identifier: string, request: Request) {
     try {
       const post = await Post.findOneOrFail(
         { slug, identifier },
         { relations: ['sub', 'comments', 'votes'] },
       );
+
+      if (request.session.user) {
+        post.setUserVote(request.session.user);
+      }
+
       return response.status(200).json(post);
     } catch (error) {
       console.log(error);

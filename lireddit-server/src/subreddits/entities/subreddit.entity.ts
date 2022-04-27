@@ -13,7 +13,7 @@ import Post from 'src/posts/entities/post.entity';
 @ToEntity('subs')
 export default class Subreddit extends Entity {
   @Index()
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: false })
   name: string;
 
   @Column({ nullable: false })
@@ -30,6 +30,9 @@ export default class Subreddit extends Entity {
 
   @OneToMany(() => Post, (post) => post.sub)
   posts: Post[];
+
+  @Column()
+  username: string
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })

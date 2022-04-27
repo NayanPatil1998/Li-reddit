@@ -22,5 +22,5 @@ export const logout = async () => {
 }
 export const me = async () => {
     const response = await axios.get<User>("/auth/me");
-    return response.data;
+    return response;
 }
