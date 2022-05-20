@@ -21,12 +21,14 @@ async function bootstrap() {
 
   app.use(
     cors({
-  
+    
       origin: 'http://localhost:4000',
+      allowedHeaders:"*",
       credentials: true,
       optionsSuccessStatus: 200,
     }),
   );
+  
 
   app.use(express.static('public'))
 
