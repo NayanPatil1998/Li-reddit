@@ -103,7 +103,7 @@ const PostScreen = (props: Props) => {
       <Container bg={bgColor[colorMode]} color={color[colorMode]} h="100vh" pt="6">
         <MenuSidebar />
 
-        <VStack>
+        <VStack w={{ base: "full", lg: "50%" }}>
           <Post post={post.data} isOfPostScreen={true} />
           <CommentSection postIdentifier={post.data.identifier} slug={post.data.slug} />
         </VStack>

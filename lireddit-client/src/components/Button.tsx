@@ -4,10 +4,11 @@ import React from "react";
 interface ButtonProps {
   width: string,
   isBgDark: boolean,
-  text: string
+  text: string,
+  onClick: React.MouseEventHandler<HTMLDivElement>
     
 }
-const PrimaryButton: React.FC<ButtonProps> = ({isBgDark, text, width}) => {
+const PrimaryButton: React.FC<ButtonProps> = ({isBgDark, text, width, onClick}) => {
 
   const buttonColorMode = isBgDark ? useColorModeValue('white', 'black') : useColorModeValue('primary', '#d7dadc')
   const buttonTextColorMode = isBgDark ? useColorModeValue('primary', 'white') : useColorModeValue('white', 'black')
@@ -15,12 +16,14 @@ const PrimaryButton: React.FC<ButtonProps> = ({isBgDark, text, width}) => {
 
   return (
     <Box
+    onClick={onClick}
       bgColor={buttonColorMode}
       textColor={buttonTextColorMode}
       height="8"
       display="flex"
       alignItems="center"
       justifyContent="center"
+      cursor="pointer"
       fontWeight="bold"
       width={width}
       borderColor={buttonTextColorMode}

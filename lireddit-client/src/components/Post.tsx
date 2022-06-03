@@ -17,6 +17,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { votePost } from "../api/postApi";
 import { me } from "../api/authApi";
+import {useRouter} from "next/router";
 
 dayjs.extend(relativeTime);
 
@@ -30,6 +31,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen }) => {
   const queryClient = useQueryClient();
   const { data: user } = useQuery("me", me);
   const toast = useToast();
+  const router = useRouter()
 
   const {  mutate } = useMutation(votePost);
 
@@ -45,6 +47,9 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen }) => {
           console.log(data);
           queryClient.invalidateQueries("posts");
           if (sub) queryClient.invalidateQueries(sub);
+          if(isOfPostScreen){
+            router.reload()
+          }
         },
         onError: (error) => {
           console.log(error);

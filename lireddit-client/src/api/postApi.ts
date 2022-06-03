@@ -7,6 +7,15 @@ export const getPosts = async () => {
     return response
 }
 
+export const createPost = async ({title, body, subName}) => {
+    const response = await axios.post<Post>('/post/create', {
+        "title": title,
+        "body": body,
+        "subName": subName
+    })
+    return response
+}
+
 export const fetchPost = async (slug : string, identifier: string ) => {
     const response = await axios.get<Post>(`/post/${identifier}/${slug}`)
     // console.log(response.data)

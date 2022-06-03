@@ -3,7 +3,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 const ormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   database: 'lireddit',
-  username: 'postgres',
+  username: 'nayan',
+  password: "9604",
   logging: true,
   synchronize: false,
   entities: ['dist/src/**/entities/*.entity.js'],

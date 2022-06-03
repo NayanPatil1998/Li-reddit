@@ -23,9 +23,7 @@ async function bootstrap() {
     cors({
     
       origin: 'http://localhost:4000',
-      allowedHeaders:"*",
       credentials: true,
-      optionsSuccessStatus: 200,
     }),
   );
   
@@ -35,7 +33,7 @@ async function bootstrap() {
   app.use(
     session({
       name: COOKIE_NAME,
-      store: new redisStore({ client: redis, disableTouch: true }),
+      store: new redisStore({ client: redis, disableTouch: true}),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,

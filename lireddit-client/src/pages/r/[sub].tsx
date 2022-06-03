@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useRouter,  } from "next/router";
 import React, { ChangeEvent, createRef, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { me } from "../../api/authApi";
@@ -287,7 +287,9 @@ const Sub = (props: Props) => {
                 <CalendarIcon />
                 <Text>Created {dayjs(response.data.createdAt).fromNow()}</Text>
               </HStack>
-              <PrimaryButton width="32" isBgDark={false} text="Create Post" />
+              <PrimaryButton onClick={() => {
+                router.push(`/r/${subName}/submit`)
+              }} width="32" isBgDark={false} text="Create Post" />
             </VStack>
           </Box>
         </HStack>

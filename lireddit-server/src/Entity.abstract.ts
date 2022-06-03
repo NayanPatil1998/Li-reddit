@@ -1,4 +1,4 @@
-import { classToPlain, Exclude } from 'class-transformer';
+import { instanceToPlain, Exclude } from 'class-transformer';
 import {
   BaseEntity,
   CreateDateColumn,
@@ -18,6 +18,6 @@ export default abstract class Entity extends BaseEntity {
   updatedAt: Date;
 
   toJSON() {
-    return classToPlain(this);
+    return instanceToPlain(this);
   }
 }

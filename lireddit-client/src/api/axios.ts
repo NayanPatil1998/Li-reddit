@@ -2,7 +2,7 @@ import Axios from "axios";
 
 
 export const axios = Axios.create({
-    baseURL: "http://44.193.75.249/",
+    baseURL: "http://localhost:3000",
     withCredentials:true,
     
     

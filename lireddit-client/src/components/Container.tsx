@@ -10,6 +10,7 @@ export const Container = (props: any) => {
     <HStack
       justifyContent="center"
       alignItems="start"
+      spacing={{lg: 8}}
       bg={bgColor[colorMode]}
       color={color[colorMode]}
       {...props}
