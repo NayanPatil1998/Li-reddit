@@ -49,7 +49,6 @@ const Comment: React.FC<CommentProps> = ({
       },
       {
         onSuccess: (data) => {
-          console.log(data);
           queryClient.invalidateQueries(`${postSlug}/comments`);
         },
         onError: (error) => {

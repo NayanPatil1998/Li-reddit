@@ -24,9 +24,10 @@ dayjs.extend(relativeTime);
 interface PostProps {
   post: Post;
   sub?: string;
+  onVoteChange?: VoidFunction
   isOfPostScreen?: boolean;
 }
-const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen }) => {
+const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) => {
   const bgColor = useColorModeValue("white", "#1a1a1b");
   const queryClient = useQueryClient();
   const { data: user } = useQuery("me", me);
@@ -44,11 +45,12 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen }) => {
       },
       {
         onSuccess: (data) => {
-          console.log(data);
+          // console.log(data);
           queryClient.invalidateQueries("posts");
+          queryClient.invalidateQueries(post.username);
           if (sub) queryClient.invalidateQueries(sub);
           if(isOfPostScreen){
-            router.reload()
+            onVoteChange
           }
         },
         onError: (error) => {
@@ -121,7 +123,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen }) => {
             <HStack width="full">
               <Image width="25px" height="25px" src="/images/reddit-logo.png" />
 
-              <Link href={`r/${post.subName}`}>
+              <Link href={`/r/${post.subName}`}>
                 <a>
                   <Text
                     fontSize="md"
@@ -133,14 +135,14 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen }) => {
                 </a>
               </Link>
               <Text fontSize="sm" color="grey">
-                · Posted by
-                <Link href={`u/${post.username}`}>
-                  <a>u/{post.username}</a>
+                · Posted by 
+                <Link href={`/user/${post.username}`}>
+                  <a> u/{post.username}</a>
                 </Link>
               </Text>
               <Text fontSize="sm" color="grey">
                 <Link
-                  href={`r/r/${post.subName}/${post.identifier}/${post.slug}`}
+                  href={`/r/${post.subName}/${post.identifier}/${post.slug}`}
                 >
                   <a>{dayjs(post.createdAt).fromNow()}</a>
                 </Link>

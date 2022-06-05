@@ -9,7 +9,15 @@ import Navbar from "../components/Navbar";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const client = new QueryClient();
+  const client = new QueryClient({defaultOptions: {
+
+    queries: {
+
+      refetchOnWindowFocus: false,
+
+    },
+
+  },});
   return (
     <ChakraProvider resetCSS theme={theme}>
       <QueryClientProvider client={client}>

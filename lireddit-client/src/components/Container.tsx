@@ -13,6 +13,8 @@ export const Container = (props: any) => {
       spacing={{lg: 8}}
       bg={bgColor[colorMode]}
       color={color[colorMode]}
+      minH="91vh"
+
       {...props}
     > 
     {props.children}

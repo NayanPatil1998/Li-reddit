@@ -56,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           xl: "space-between",
         }}
       >
-        <NextLink href="/auth" as="/auth">
+        <NextLink href="/">
           <Flex style={{ cursor: "pointer" }}>
             <Image width="40px" height="35px" src="/images/reddit-logo.png" />
             <Spacer width="2" />

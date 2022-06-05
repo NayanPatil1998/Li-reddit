@@ -15,7 +15,7 @@ const Auth: React.FC<AuthProps> = ({}) => {
   const { data: user, isLoading, isFetching } = useQuery("me", me);
   const router = useRouter();
 
-  if (isLoading || isFetching)
+  if (isLoading)
     return (
       <Flex height="100vh">
         <Center width="full">

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { verify } from 'argon2';
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
+import Comment from 'src/comments/entities/comment.entity';
+import Post from 'src/posts/entities/post.entity';
 import { COOKIE_NAME } from 'src/utils/constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -120,6 +122,45 @@ export class UsersService {
   me(request: Request, response: Response): Response {
     const user: User | undefined = request.session.user;
     return response.json(user);
+  }
+
+  async getUserSubmissions(
+    request: Request,
+    response: Response,
+    username: string,
+  ): Promise<Response> {
+    try {
+      const user = await User.findOneOrFail({
+        where: { username: username },
+      });
+
+      const posts = await Post.find({
+        where: { user },
+        relations: ['comments', 'votes', 'sub'],
+        order: { createdAt: 'DESC' },
+      });
+
+      const comments = await Comment.find({
+        where: { user },
+        relations: ['post'],
+        order: { createdAt: 'DESC' },
+      });
+
+      if (request.session.user) {
+        posts.forEach((p) => p.setUserVote(request.session.user));
+        comments.forEach((c) => c.setUserVote(request.session.user));
+      }
+
+      let submissions: any = {};
+
+      submissions.posts = posts;
+      submissions.comments = comments;
+
+      return response.status(200).json({ user, submissions });
+    } catch (error) {
+      console.log(error);
+      return response.status(500).json({ error: 'something went wrong' });
+    }
   }
 }
 

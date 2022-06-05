@@ -114,7 +114,7 @@ const Sub = (props: Props) => {
     );
   };
 
-  if (isLoading || isFetching || isRefetching || imageUploadLoading) {
+  if (isLoading || imageUploadLoading) {
     return (
       <Box
         bg={bgColor[colorMode]}

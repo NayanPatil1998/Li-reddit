@@ -37,7 +37,7 @@ const CommentSection: FC<CommentSectionProps> = ({ slug, postIdentifier }) => {
 
   const commentRef = createRef<HTMLTextAreaElement>();
 
-  const { mutate } = useMutation(postComment);
+  const { mutate, isLoading: postCommentLoading } = useMutation(postComment);
 
   const queryClient = useQueryClient();
 
@@ -108,7 +108,7 @@ const CommentSection: FC<CommentSectionProps> = ({ slug, postIdentifier }) => {
     );
   };
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <Box bg={bgColor[colorMode]} color={color[colorMode]} margin="2">
         <Center height="full">
@@ -144,6 +144,7 @@ const CommentSection: FC<CommentSectionProps> = ({ slug, postIdentifier }) => {
                 }}
                 onClick={submitComment}
                 colorScheme="gray"
+                isLoading={postCommentLoading}
               >
                 Comment
               </Button>{" "}

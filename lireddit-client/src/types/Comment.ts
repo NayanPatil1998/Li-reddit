@@ -1,3 +1,5 @@
+import { Post } from "./post";
+
 export interface Comment {
     createdAt: Date;
     updatedAt: Date;
@@ -7,4 +9,5 @@ export interface Comment {
     // votes: Vote[];
     userVote: number;
     voteScore: number;
+    post?: Post
 }

@@ -52,7 +52,6 @@ const TrendingSubSection: FC = () => {
   } = useQuery("trendsubs", getTrendingSubs);
 
   const HeaderBgColor = { light: "primary", dark: "#fe4500" };
-  console.log(trendSubs);
   return (
     <Box
       display={{
@@ -62,8 +61,8 @@ const TrendingSubSection: FC = () => {
       width="25em"
       style={{ marginTop: "30px" }}
     >
-      {isLoading ||
-        (isFetching ? (
+      {isLoading 
+         ? (
           <Center height="full">
             <Spinner size="lg" />
           </Center>
@@ -107,7 +106,7 @@ const TrendingSubSection: FC = () => {
               </Box>
             ))}
           </VStack>
-        ))}
+        )}
     </Box>
   );
 };

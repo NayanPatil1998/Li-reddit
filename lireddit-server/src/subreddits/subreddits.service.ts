@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { isEmpty } from 'class-validator';
 import s from 'connect-redis';
 import { Request, Response } from 'express';
 import fs from 'fs';
-import { getConnection } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import Post from './../posts/entities/post.entity';
 import { CreateSubredditDto } from './dto/create-subreddit.dto';
 import { UpdateSubredditDto } from './dto/update-subreddit.dto';
@@ -147,17 +148,26 @@ export class SubredditsService {
   }
 
 
+  async searchSubs (req: Request, res: Response, name: string) : Promise<Response> {
 
+    try {
+      if(isEmpty(name)){
+        return res.status(400).json({message: "Name must not be empty"})
+      }
+  
+      const subs = await getRepository(Subreddit)
+      .createQueryBuilder().where('LOWER(name) LIKE :name', {name: `${name.toLowerCase().trim()}%`})
+      .getMany()
+  
+      return res.status(200).json(subs)
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({error: "Something went wrong"})
+    }
 
-
-
-  update(id: number, updateSubredditDto: UpdateSubredditDto) {
-    return `This action updates a #${id} subreddit`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subreddit`;
-  }
+
 }
 
 

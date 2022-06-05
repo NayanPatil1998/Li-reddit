@@ -1,3 +1,4 @@
+import { Submissions } from "../types/submissions"
 import { User } from "../types/user"
 import { axios } from "./axios"
 
@@ -22,5 +23,10 @@ export const logout = async () => {
 }
 export const me = async () => {
     const response = await axios.get<User>("/auth/me");
+    return response;
+}
+
+export const getUserSubmissions = async (username: string) => {
+    const response = await axios.get<Submissions>(`/auth/submission/${username}`);
     return response;
 }

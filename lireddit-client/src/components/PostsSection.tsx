@@ -1,5 +1,5 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/layout";
-import { Button, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/layout";
+import { Button, Skeleton, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { getPosts } from "../api/postApi";
 import Post from "./Post";
@@ -10,7 +10,10 @@ const PostsSection: React.FC<PostsSectionProps> = ({}) => {
   //   const buttonBgColorMode = useColorModeValue('#fe4500', 'black')
   const buttonTextColorMode = useColorModeValue("primary", "white");
 
-  const { isLoading, isError, data, error, isFetched } = useQuery("posts", getPosts);
+  const { isLoading, isError, data, error, isFetched } = useQuery(
+    "posts",
+    getPosts
+  );
   // console.log(data)
   return (
     <Box
@@ -20,13 +23,19 @@ const PostsSection: React.FC<PostsSectionProps> = ({}) => {
       }}
       p="4"
     >
-      {isLoading || error || !isFetched ? (
+      {isError || error ? (
         <div>{error}</div>
       ) : (
         <VStack>
-          {data && data.data.map((post) => {
-           return <Post key={post.identifier} post={post}  />;
-          })}
+          {data &&
+            data.data.map((post) => {
+              return (
+                <Skeleton w="full" isLoaded={!isLoading} >
+                  
+                  <Post key={post.identifier} post={post} />
+                </Skeleton>
+              );
+            })}
         </VStack>
       )}
     </Box>

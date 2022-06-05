@@ -10,8 +10,8 @@ export interface User {
 
     username: string;
 
-    createdAt: Date;
+    createdAt: string;
 
-    updatedAt: Date;
+    updatedAt: string;
 
 }

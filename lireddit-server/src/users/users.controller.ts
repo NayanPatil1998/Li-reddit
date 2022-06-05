@@ -51,4 +51,14 @@ export class UsersController {
   logout(@Res() response: Response, @Req() request: Request) {
     return this.usersService.logout(response, request);
   }
+
+  @Get('/submission/:username')
+  getUserSubmissions(
+    @Param() params,
+    @Res() response: Response,
+    @Req() request: Request,
+  ) {
+    const { username } = params;
+    return this.usersService.getUserSubmissions(request, response, username);
+  }
 }

@@ -16,10 +16,13 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { Formik, Form } from "formik";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
+import { userInfo } from "os";
+import React, {  useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { me } from "../../../api/authApi";
 import { createPost } from "../../../api/postApi";
 import { getSub } from "../../../api/SubApi";
 import PrimaryButton from "../../../components/Button";
@@ -43,6 +46,15 @@ const CreatePost: React.FC<CreatePostProps> = () => {
   const {isLoading :createPostLoading, isError : isCreatePostError, error, mutate} = useMutation(createPost)
   const queryClient = useQueryClient()
 
+
+  const { data: user, isLoading: userLoading } = useQuery("me", me);
+
+  useEffect(() => {
+    if(!userLoading){
+      if(user) router.push("/auth")
+    }
+  }, [userLoading])
+
   const {
     isLoading,
     data: response,
@@ -63,7 +75,7 @@ const CreatePost: React.FC<CreatePostProps> = () => {
     }
   );
 
-  if (isLoading || isFetching || isRefetching) {
+  if (isLoading || userLoading || !user) {
     return (
       <Box
         bg={bgColor[colorMode]}
@@ -82,9 +94,14 @@ const CreatePost: React.FC<CreatePostProps> = () => {
    router.push("/")
   }
 
-  return (
-    <>
-      <Head>{/* <title>{post.data.title}</title> */}</Head>
+
+
+
+  return (<>{
+    !user && (<>
+    <Head>
+        <title>Submit to r/{subName}</title>
+      </Head>
 
       <Container
         bg={bgColor[colorMode]}
@@ -197,9 +214,21 @@ const CreatePost: React.FC<CreatePostProps> = () => {
             {/* <PrimaryButton width="32" isBgDark={false} text="Create Post" /> */}
           </VStack>
         </Box>
-      </Container>
-    </>
-  );
+      </Container></>)
+
+  }</>);
 };
 
 export default CreatePost;
+
+
+export const getServerSideProps : GetServerSideProps = async ({req, res}) => {
+  try {
+    const cookie = req.headers.cookie;
+    console.log(cookie)
+
+    return {props: {}}
+  } catch (error) {
+    res.writeHead(307, {location: "/auth"}).end()
+  }
+}

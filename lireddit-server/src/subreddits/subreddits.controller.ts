@@ -44,17 +44,8 @@ export class SubredditsController {
     return this.subredditsService.uploadSubImage(request, response)
   }
 
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateSubredditDto: UpdateSubredditDto,
-  ) {
-    return this.subredditsService.update(+id, updateSubredditDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subredditsService.remove(+id);
+  @Get('/search/:name')
+  searchSubs(@Param('name') name: string,  @Req() request: Request, @Res() response: Response){
+    return this.subredditsService.searchSubs(request, response, name)
   }
 }

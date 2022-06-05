@@ -10,7 +10,7 @@ import {
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
-import { isError, useQuery } from "react-query";
+import { isError, QueryClient, useQuery, useQueryClient } from "react-query";
 import { fetchPost } from "../../../../api/postApi";
 import CommentSection from "../../../../components/CommentSection";
 import { Container } from "../../../../components/Container";
@@ -26,7 +26,7 @@ const PostScreen = (props: Props) => {
   const toast = useToast();
 
   const { colorMode } = useColorMode();
-
+  const queryClient = useQueryClient()
   const bgColor = { light: "#ebebeb", dark: "#030303" };
 
   const color = { light: "black", dark: "white" };
@@ -64,7 +64,7 @@ const PostScreen = (props: Props) => {
 
   // const {data} =
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <Box
         bg={bgColor[colorMode]}
@@ -97,14 +97,14 @@ const PostScreen = (props: Props) => {
   return (
     <>
       <Head>
-        <title>{post.data.title}</title>
+        <title>Lireddit - {post.data.title}</title>
       </Head>
 
-      <Container bg={bgColor[colorMode]} color={color[colorMode]} h="100vh" pt="6">
+      <Container bg={bgColor[colorMode]} color={color[colorMode]} h="full" pt="6">
         <MenuSidebar />
 
         <VStack w={{ base: "full", lg: "50%" }}>
-          <Post post={post.data} isOfPostScreen={true} />
+          <Post post={post.data} isOfPostScreen={true} onVoteChange={() =>queryClient.invalidateQueries(slug as string) } />
           <CommentSection postIdentifier={post.data.identifier} slug={post.data.slug} />
         </VStack>
 

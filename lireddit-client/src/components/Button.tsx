@@ -5,7 +5,7 @@ interface ButtonProps {
   width: string,
   isBgDark: boolean,
   text: string,
-  onClick: React.MouseEventHandler<HTMLDivElement>
+  onClick?: React.MouseEventHandler<HTMLDivElement>
     
 }
 const PrimaryButton: React.FC<ButtonProps> = ({isBgDark, text, width, onClick}) => {
