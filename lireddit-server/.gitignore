@@ -1,7 +1,7 @@
 # compiled output
 /dist
 /node_modules
-
+.env
 # Logs
 logs
 *.log
@@ -11,7 +11,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 yarn.lock
-
+lireddit-server/src/db/migrations/1648666518969-fakedata.ts
 # OS
 .DS_Store
 

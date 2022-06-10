@@ -38,8 +38,7 @@ const PostScreen = (props: Props) => {
     error,
     isError,
     status,
-    isFetching,
-    isLoadingError,
+
   } = useQuery(
     slug,
     async () => {
@@ -100,7 +99,7 @@ const PostScreen = (props: Props) => {
         <title>Lireddit - {post.data.title}</title>
       </Head>
 
-      <Container bg={bgColor[colorMode]} color={color[colorMode]} h="full" pt="6">
+      <Container bg={bgColor[colorMode]} color={color[colorMode]} pt="20">
         <MenuSidebar />
 
         <VStack w={{ base: "full", lg: "50%" }}>
@@ -122,7 +121,4 @@ const PostScreen = (props: Props) => {
 };
 
 export default PostScreen;
-
-
-
 

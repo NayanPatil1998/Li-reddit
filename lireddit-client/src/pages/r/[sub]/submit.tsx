@@ -20,7 +20,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { userInfo } from "os";
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { me } from "../../../api/authApi";
 import { createPost } from "../../../api/postApi";
@@ -41,19 +41,24 @@ const CreatePost: React.FC<CreatePostProps> = () => {
   const bgColor = { light: "#ebebeb", dark: "#030303" };
   const HeaderBgColor = { light: "primary", dark: "#fe4500" };
   const color = { light: "black", dark: "white" };
-
-  const subName = router.query.sub;
-  const {isLoading :createPostLoading, isError : isCreatePostError, error, mutate} = useMutation(createPost)
-  const queryClient = useQueryClient()
-
-
   const { data: user, isLoading: userLoading } = useQuery("me", me);
 
+  const subName = router.query.sub;
+  const {
+    isLoading: createPostLoading,
+    isError: isCreatePostError,
+    error,
+    mutate,
+  } = useMutation(createPost);
+  const queryClient = useQueryClient();
+
   useEffect(() => {
-    if(!userLoading){
-      if(user) router.push("/auth")
+    if (!userLoading) {
+      if (!user.data.email) {
+        router.push("/auth");
+      }
     }
-  }, [userLoading])
+  }, [userLoading]);
 
   const {
     isLoading,
@@ -91,144 +96,145 @@ const CreatePost: React.FC<CreatePostProps> = () => {
   }
 
   if (isError || status === "error") {
-   router.push("/")
+    router.push("/");
   }
 
+  return (
+    <>
+      {user.data.email && (
+        <>
+          <Head>
+            <title>Submit to r/{subName}</title>
+          </Head>
 
+          <Container bg={bgColor[colorMode]} color={color[colorMode]} pt="24">
+            <Box />
+            <Flex direction="column" p="4" w={{ base: "full", lg: "40%" }}>
+              <Text fontWeight="bold" fontSize="2xl" mb="2">
+                Create Post
+              </Text>
+              <hr style={{ margin: "10px 0" }} />
+              <Text fontSize="xl" mb="2">
+                Submit post to r/{subName}
+              </Text>
 
-
-  return (<>{
-    !user && (<>
-    <Head>
-        <title>Submit to r/{subName}</title>
-      </Head>
-
-      <Container
-        bg={bgColor[colorMode]}
-        color={color[colorMode]}
-        h="90vh"
-        pt="6"
-      >
-        <Box />
-        <Flex direction="column" w={{ base: "full", lg: "40%" }}>
-          <Text fontWeight="bold" fontSize="2xl" mb="2">
-            Create Post
-          </Text>
-          <hr style={{margin: "10px 0"}} />
-          <Text fontSize="xl" mb="2">
-            Submit post to r/{subName}
-          </Text>
-
-          <Formik
-            initialValues={{ title: "", body: "" }}
-            onSubmit={async (values, { setSubmitting, setErrors }) => {
-              if (values.title.length == 0) setErrors({ title: "Required" });
-              else {
-
-                mutate({
-                    subName: subName,
-                    title: values.title,
-                    body: values.body
-                },{
-                    onSuccess: (responseData) => {
-                      console.log(responseData);
-                     if (responseData.status === 200) {
-                         router.push(`/r/${subName}/${responseData.data.identifier}/${responseData.data.slug}`);
-                        queryClient.invalidateQueries('posts')
-                        queryClient.invalidateQueries(subName)
+              <Formik
+                initialValues={{ title: "", body: "" }}
+                onSubmit={async (values, { setSubmitting, setErrors }) => {
+                  if (values.title.length == 0)
+                    setErrors({ title: "Required" });
+                  else {
+                    mutate(
+                      {
+                        subName: subName,
+                        title: values.title,
+                        body: values.body,
+                      },
+                      {
+                        onSuccess: (responseData) => {
+                          console.log(responseData);
+                          if (responseData.status === 200) {
+                            router.push(
+                              `/r/${subName}/${responseData.data.identifier}/${responseData.data.slug}`
+                            );
+                            queryClient.invalidateQueries("posts");
+                            queryClient.invalidateQueries(subName);
+                          }
+                        },
                       }
-                    }
-                  })
-              }
+                    );
+                  }
 
-              setSubmitting(false);
-            }}
-          >
-            {({ values }) => (
-              <Form>
-                  <Box position="relative">
+                  setSubmitting(false);
+                }}
+              >
+                {({ values }) => (
+                  <Form>
+                    <Box position="relative">
+                      <InputTextField
+                        name="title"
+                        placeholder="EnterTitle"
+                        label="Title"
+                        maxLength={300}
+                      />
+                      <Text pos="absolute" top={0} right={0}>
+                        {values.title.length}/300
+                      </Text>
+                    </Box>
 
-               <InputTextField
-                  name="title"
-                  placeholder="EnterTitle"
-                  label="Title"
-                  maxLength={300}
-                />
-                <Text pos="absolute" top={0} right={0}>{values.title.length}/300</Text>
-                  </Box>
-                
-                <InputTextField
-                  name="body"
-                  placeholder="Enter body"
-                  label="Body"
-                    isTextArea                
-                />
+                    <InputTextField
+                      name="body"
+                      placeholder="Enter body"
+                      label="Body"
+                      isTextArea
+                    />
 
-                <Button
-                  mt={4}
-                  color="white"
-                  bgColor={HeaderBgColor[colorMode]}
-                  paddingY="6"
-                  width="full"
-                  borderRadius="3xl"
-                  isLoading={createPostLoading}
-                  loadingText="Submitting"
-                  type="submit"
-                >
-                  Submit Post
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </Flex>
-        <Box
-          display={{
-            base: "none",
-            xl: "block",
-          }}
-          // border="1px"
-          rounded="lg"
-          w="sm"
-          h="sm"
-        >
-          <VStack spacing="8">
+                    <Button
+                      mt={4}
+                      color="white"
+                      bgColor={HeaderBgColor[colorMode]}
+                      paddingY="6"
+                      width="full"
+                      borderRadius="3xl"
+                      isLoading={createPostLoading}
+                      loadingText="Submitting"
+                      type="submit"
+                    >
+                      Submit Post
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+            </Flex>
             <Box
-              borderTopLeftRadius="lg"
-              borderTopRightRadius="lg"
-              width="full"
-              height="12"
-              bgColor={HeaderBgColor[colorMode]}
-              color="white"
+              display={{
+                base: "none",
+                xl: "block",
+              }}
+              // border="1px"
+              rounded="lg"
+              w="sm"
+              h="sm"
             >
-              <Center height="full">
-                <Text fontWeight="bold" fontSize="md">
-                  About Community
-                </Text>
-              </Center>
-            </Box>
-            <Box px="5">{response.data.description}</Box>
-            {/* <HStack>
+              <VStack spacing="8">
+                <Box
+                  borderTopLeftRadius="lg"
+                  borderTopRightRadius="lg"
+                  width="full"
+                  height="12"
+                  bgColor={HeaderBgColor[colorMode]}
+                  color="white"
+                >
+                  <Center height="full">
+                    <Text fontWeight="bold" fontSize="md">
+                      About Community
+                    </Text>
+                  </Center>
+                </Box>
+                <Box px="5">{response.data.description}</Box>
+                {/* <HStack>
                 <CalendarIcon />
                 <Text>Created {dayjs(response.data.createdAt)}</Text>
               </HStack> */}
-            {/* <PrimaryButton width="32" isBgDark={false} text="Create Post" /> */}
-          </VStack>
-        </Box>
-      </Container></>)
-
-  }</>);
+                {/* <PrimaryButton width="32" isBgDark={false} text="Create Post" /> */}
+              </VStack>
+            </Box>
+          </Container>
+        </>
+      )}
+    </>
+  );
 };
 
 export default CreatePost;
 
+// export const getServerSideProps : GetServerSideProps = async ({req, res}) => {
+//   try {
+//     const cookie = req.headers.cookie;
+//     console.log(cookie)
 
-export const getServerSideProps : GetServerSideProps = async ({req, res}) => {
-  try {
-    const cookie = req.headers.cookie;
-    console.log(cookie)
-
-    return {props: {}}
-  } catch (error) {
-    res.writeHead(307, {location: "/auth"}).end()
-  }
-}
+//     return {props: {}}
+//   } catch (error) {
+//     res.writeHead(307, {location: "/auth"}).end()
+//   }
+// }

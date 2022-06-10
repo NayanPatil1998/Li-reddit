@@ -1,6 +1,6 @@
 import { useColorMode, Switch } from '@chakra-ui/react'
 
-export const DarkModeSwitch = () => {
+export const DarkModeSwitch = (props) => {
   const { colorMode, toggleColorMode } = useColorMode()
   const isDark = colorMode === 'dark'
   return (
@@ -8,7 +8,9 @@ export const DarkModeSwitch = () => {
       right="1rem"
       color="green"
       isChecked={isDark}
+      {...props}
       onChange={toggleColorMode}
+      
     />
   )
 }

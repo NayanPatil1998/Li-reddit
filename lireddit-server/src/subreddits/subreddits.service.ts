@@ -16,9 +16,9 @@ export class SubredditsService {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { title, name } = createSubredditDto;
+    const { title, name, description } = createSubredditDto;
     if (title.trim().length == 0) {
-      return response.status(400).json({
+      return response.json({
         errors: [
           {
             field: 'title',
@@ -27,7 +27,7 @@ export class SubredditsService {
         ],
       });
     } else if (name.trim().length == 0) {
-      return response.status(400).json({
+      return response.json({
         errors: [
           {
             field: 'name',
@@ -37,10 +37,10 @@ export class SubredditsService {
       });
     }
 
-    const sub = await Subreddit.findOne({ name: name.toLowerCase() });
+    const sub = await Subreddit.findOne({ name: name.trim().toLowerCase() });
 
     if (sub) {
-      return response.status(400).json({
+      return response.json({
         errors: [
           {
             field: 'name',
@@ -51,7 +51,7 @@ export class SubredditsService {
     }
 
     try {
-      const newSub = Subreddit.create(createSubredditDto);
+      const newSub = Subreddit.create({name: name.trim().toLowerCase(), description, title  });
 
       newSub.user = request.session.user;
 

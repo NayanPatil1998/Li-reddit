@@ -35,6 +35,7 @@ export class PostsService {
   async fetchPosts(response: Response, request: Request): Promise<Response> {
     try {
       const posts = await Post.find({
+        
         order: {
           createdAt: 'DESC',
         },
@@ -44,6 +45,7 @@ export class PostsService {
       if (request.session.user) {
         posts.forEach((p) => p.setUserVote(request.session.user));
       }
+  
 
       return response.status(200).json(posts);
     } catch (error) {

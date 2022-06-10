@@ -61,7 +61,8 @@ const Login: React.FC<LoginProps> = ({}) => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Box px={{base: "6", md:"0"}}>
+            <Form >
             <InputTextField
               name="emailOrUsername"
               placeholder="Enter Username or Email"
@@ -88,6 +89,7 @@ const Login: React.FC<LoginProps> = ({}) => {
               Login
             </Button>
           </Form>
+          </Box>
         )}
       </Formik>
     </Box>

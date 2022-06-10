@@ -5,40 +5,41 @@ import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import cors from 'cors';
 
-import express  from "express"
+import express from 'express';
 import { COOKIE_NAME, __prod__ } from './utils/constants';
 import User from './users/entities/user.entity';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 const redisStore = connectRedis(session);
-const redis = new Redis();
+const redis = new Redis(process.env.REDIS_URL);
 declare module 'express-session' {
   export interface SessionData {
     user: User;
   }
 }
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.use(
     cors({
-    
-      origin: 'http://localhost:4000',
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     }),
   );
-  
 
-  app.use(express.static('public'))
+  app.set('trust proxy', 1);
+  app.use(express.static('public'));
 
   app.use(
     session({
       name: COOKIE_NAME,
-      store: new redisStore({ client: redis, disableTouch: true}),
+      store: new redisStore({ client: redis, disableTouch: true }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: 'lax', //CSEF
+        sameSite: 'none', //CSRF
         secure: __prod__,
+        domain: __prod__ ? ".vercel.app" : undefined
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET_KEY,
@@ -46,7 +47,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 
   console.log(`Server is running on ${await app.getUrl()}`);
 }

@@ -34,7 +34,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
   const toast = useToast();
   const router = useRouter()
 
-  const {  mutate } = useMutation(votePost);
+  const {  mutate, isLoading } = useMutation(votePost);
 
   const vote = (vote: number) => {
     mutate(
@@ -50,6 +50,8 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
           queryClient.invalidateQueries(post.username);
           if (sub) queryClient.invalidateQueries(sub);
           if(isOfPostScreen){
+            queryClient.invalidateQueries(post.slug)
+
             onVoteChange
           }
         },
@@ -90,6 +92,9 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
           alignItems="center"
         >
           <IconButton
+          
+          isLoading={isLoading}
+            zIndex={0}
             onClick={() => user && vote(1)}
             borderRadius="3xl"
             bgColor={post.userVote === 1 && "#fe4500"}
@@ -106,6 +111,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
           <Box height="3" width="3" />
 
           <IconButton
+          isLoading={isLoading}
             onClick={() => user && vote(-1)}
             borderRadius="3xl"
             bgColor={post.userVote === -1 && "blue"}
@@ -117,8 +123,15 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
             }}
             icon={<GoArrowDown />}
           />
+           <Text ml="4" display={{base: "block", "md" : "none"}} fontSize="sm" color="grey">
+                <Link
+                  href={`/r/${post.subName}/${post.identifier}/${post.slug}`}
+                >
+                  <a>{dayjs(post.createdAt).fromNow()}</a>
+                </Link>
+              </Text>
         </Flex>
-        <Box width="full" borderRadius="md" p="4" bgColor={bgColor} cursor="pointer">
+        <Box width="full" borderRadius="md" p="4" bgColor={bgColor} cursor="pointer" textAlign="start">
           <VStack>
             <HStack width="full">
               <Image width="25px" height="25px" src="/images/reddit-logo.png" />
@@ -140,7 +153,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
                   <a> u/{post.username}</a>
                 </Link>
               </Text>
-              <Text fontSize="sm" color="grey">
+              <Text display={{base: "none", "md" : "block"}} fontSize="sm" color="grey">
                 <Link
                   href={`/r/${post.subName}/${post.identifier}/${post.slug}`}
                 >
@@ -162,7 +175,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
                 )}
               </Box>
             </Link>
-            <HStack width="full">
+            <HStack width="full" display={{base: "none", md: "flex"}}>
               <HStack p="2" _hover={{ cursor: "pointer", bgColor: "#e6e6e6" }}>
                 <Icon color="grey" fontSize="20px" as={FaRegCommentAlt} />
                 <Text fontSize="md" fontWeight="bold" color="grey">
@@ -181,6 +194,7 @@ const Post: React.FC<PostProps> = ({ post, sub, isOfPostScreen, onVoteChange }) 
                   Save
                 </Text>
               </HStack>
+             
             </HStack>
           </VStack>
         </Box>

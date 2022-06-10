@@ -18,6 +18,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { me } from "../../api/authApi";
 import { getSub, updateImage } from "../../api/SubApi";
 import PrimaryButton from "../../components/Button";
+import { Container } from "../../components/Container";
 import Post from "../../components/Post";
 import MenuSidebar from "../../components/Sidebar/MenuSidebar";
 
@@ -148,13 +149,12 @@ const Sub = (props: Props) => {
   return (
     <>
       <Head>
-      <title>{response.data.title}</title>
+      <title>Lireddit - r/{response.data.name}</title>
     </Head>
-    <Flex
-      direction="row"
+    <Container
       bg={bgColor[colorMode]}
       color={color[colorMode]}
-      padding="4"
+      minH="100vh"
     >
       {/* <Flex></Flex> */}
       <MenuSidebar />
@@ -250,22 +250,24 @@ const Sub = (props: Props) => {
           </Box>
         </Box>
 
-        <HStack alignItems="start">
+        <Flex flexDir={{base: "column-reverse", xl: "row"}} >
           <VStack w={{ base: "full", xl: "70%" }}>
-            {response.data &&
+          <PrimaryButton onClick={() => {
+                router.push(`/r/${subName}/submit`)
+              }} isBgDark={false} text="Create Post" />
+            {response.data.posts.length === 0 ? <Text mt="10">No Posts in this Subreddit</Text> :
               response.data.posts.map((post) => {
                 return <Post key={post.identifier}sub={post.subName} post={post} />;
               })}
           </VStack>
           <Box
-            display={{
-              base: "none",
-              xl: "block",
-            }}
+          display={{base :"none", xl: "block"}}
+          // ml={{base: "0", xl: "4"}}
+          m={{base: "2", xl: "4"}}
             // border="1px"
             rounded="lg"
-            w="sm"
-            h="sm"
+            w={{base: "full", xl: "sm"}}
+            maxW={{base: "full", xl: "sm"}}
           >
             <VStack spacing="8">
               <Box
@@ -289,14 +291,14 @@ const Sub = (props: Props) => {
               </HStack>
               <PrimaryButton onClick={() => {
                 router.push(`/r/${subName}/submit`)
-              }} width="32" isBgDark={false} text="Create Post" />
+              }} isBgDark={false} text="Create Post" />
             </VStack>
           </Box>
-        </HStack>
+        </Flex>
       </Flex>
 
       {/* <Box width="full" height="40"></Box> */}
-    </Flex>
+    </Container>
     </>
   );
 };

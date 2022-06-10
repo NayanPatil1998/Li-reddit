@@ -41,6 +41,7 @@ const Auth: React.FC<AuthProps> = ({}) => {
       alignItems="center"
       display="flex"
       height="100vh"
+
     >
       <Box textAlign="center">
         <Image width="70px" height="70px" src="/images/reddit-logo.png" />

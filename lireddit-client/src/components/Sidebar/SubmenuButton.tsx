@@ -6,12 +6,14 @@ interface SubmenuButtonProps {
   isSeleted?: boolean;
   icon: any,
   text: string;
+  onClick : React.MouseEventHandler<HTMLDivElement>
 }
-const SubmenuButton: React.FC<SubmenuButtonProps> = ({ isSeleted, icon, text }) => {
+const SubmenuButton: React.FC<SubmenuButtonProps> = ({ isSeleted, icon, text, onClick }) => {
   const bgColorMode = isSeleted && useColorModeValue("#ddddee", "#292828");
 
   return (
     <Box
+    onClick={onClick}
     cursor="pointer"
       borderRadius="50"
       mb={{

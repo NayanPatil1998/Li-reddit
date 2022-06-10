@@ -44,6 +44,7 @@ import {
   
     return (
       <Box
+      textAlign="start"
         width="full"
       //   justifySelf="start"
         px={{
@@ -92,7 +93,7 @@ import {
                     <a> {title} </a>
                   </Link>
                 </Text>
-                <Text fontSize="sm" color="grey">
+                <Text display={{base: "none", "md" : "block"}} fontSize="sm" color="grey">
                   <a>{dayjs(comment.createdAt).fromNow()}</a>
                 </Text>
               </HStack>
@@ -101,6 +102,11 @@ import {
                   {comment.body}
                 </Text>
               </Box>
+              <Text ml="4" display={{base: "block", "md" : "none"}} fontSize="sm" color="grey">
+               
+                  <a>{dayjs(comment.createdAt).fromNow()}</a>
+               
+              </Text>
             </VStack>
           </Box>
         </Flex>

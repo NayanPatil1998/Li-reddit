@@ -11,9 +11,10 @@ export const Container = (props: any) => {
       justifyContent="center"
       alignItems="start"
       spacing={{lg: 8}}
+      pt="16"
       bg={bgColor[colorMode]}
       color={color[colorMode]}
-      minH="91vh"
+      minH="100vh"
 
       {...props}
     > 

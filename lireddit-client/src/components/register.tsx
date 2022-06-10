@@ -11,9 +11,15 @@ import { useMutation, useQueryClient } from "react-query";
 interface RegisterProps {}
 const Register: React.FC<RegisterProps> = ({}) => {
   const router = useRouter();
-  const {data: resData, isLoading, isError, isSuccess, error, mutate} = useMutation(register)
-  const queryClient = useQueryClient()
-
+  const {
+    data: resData,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    mutate,
+  } = useMutation(register);
+  const queryClient = useQueryClient();
 
   return (
     <Box minW="sm">
@@ -26,7 +32,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
           else if (values.password.length == 0)
             setErrors({ password: "Required" });
           else {
-            console.log(values)
+            console.log(values);
 
             mutate(values, {
               onSuccess: (data) => {
@@ -34,14 +40,12 @@ const Register: React.FC<RegisterProps> = ({}) => {
                 if (data.data?.errors) {
                   setErrors(toErrorMap(data.data.errors as []));
                 } else if (data.data.user) {
-                  queryClient.invalidateQueries('me')
+                  queryClient.invalidateQueries("me");
                   router.push("/");
                 }
-              }
+              },
             });
 
-          
-         
             // await executeRegister({data: values})
             // mutate(values, {
             //   onError(err) {
@@ -49,47 +53,47 @@ const Register: React.FC<RegisterProps> = ({}) => {
             //   },
             // });
           }
-
-          
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <InputTextField
-              name="username"
-              placeholder="Enter Username"
-              label="Username"
-              required
-            />
-            <InputTextField
-              name="email"
-              placeholder="Enter Email"
-              label="Email"
-              type="email"
-              required
-            />
-            <InputTextField
-              name="password"
-              placeholder="Enter Password"
-              label="Password"
-              type="password"
-              required
-            />
+          <Box px={{ base: "6", md: "0" }}>
+            <Form>
+              <InputTextField
+                name="username"
+                placeholder="Enter Username"
+                label="Username"
+                required
+              />
+              <InputTextField
+                name="email"
+                placeholder="Enter Email"
+                label="Email"
+                type="email"
+                required
+              />
+              <InputTextField
+                name="password"
+                placeholder="Enter Password"
+                label="Password"
+                type="password"
+                required
+              />
 
-            <Button
-              mt={4}
-              color="white"
-              bgColor="#0079d3"
-              paddingY="6"
-              width="full"
-              borderRadius="3xl"
-              isLoading={isLoading}
-              loadingText="Submitting"
-              type="submit"
-            >
-              Register
-            </Button>
-          </Form>
+              <Button
+                mt={4}
+                color="white"
+                bgColor="#0079d3"
+                paddingY="6"
+                width="full"
+                borderRadius="3xl"
+                isLoading={isLoading}
+                loadingText="Submitting"
+                type="submit"
+              >
+                Register
+              </Button>
+            </Form>
+          </Box>
         )}
       </Formik>
     </Box>

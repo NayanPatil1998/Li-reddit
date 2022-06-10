@@ -15,22 +15,25 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useQuery } from "react-query";
 import { getTrendingSubs } from "../api/SubApi";
 import { Container } from "../components/Container";
 import PostsSection from "../components/PostsSection";
 import MenuSidebar from "../components/Sidebar/MenuSidebar";
 import Head from "next/head"
+import PrimaryButton from "../components/Button";
+import CreateSub from "../components/CreateSub";
 
 const Index: FC = () => {
+
   return (
     <>
     <Head>
       <title>Lireddit</title>
     </Head>
     <Container display="flex">
-      <MenuSidebar />
+      <MenuSidebar   />
       <PostsSection />
       <TrendingSubSection />
     </Container>
@@ -105,6 +108,7 @@ const TrendingSubSection: FC = () => {
                 </HStack>
               </Box>
             ))}
+            <CreateSub />
           </VStack>
         )}
     </Box>

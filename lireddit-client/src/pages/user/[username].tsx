@@ -14,7 +14,7 @@ import {
   Spinner,
   HStack,
   Avatar,
-  Flex,
+  Skeleton,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
@@ -60,8 +60,6 @@ const UserScreen: React.FC<UserScreenProps> = () => {
     }
   );
 
-
-
   useEffect(() => {
     if (!isLoading) {
       let date = new Date(response.data.user.createdAt);
@@ -70,14 +68,13 @@ const UserScreen: React.FC<UserScreenProps> = () => {
     }
   }, [isLoading]);
 
-  
   if (isLoading) {
     return (
       <Box
-      bg={bgColor[colorMode]}
-      color={color[colorMode]}
-      margin="2"
-      h="100vh"
+        bg={bgColor[colorMode]}
+        color={color[colorMode]}
+        margin="2"
+        h="100vh"
       >
         <Center height="full">
           <Spinner size="lg" />
@@ -90,8 +87,6 @@ const UserScreen: React.FC<UserScreenProps> = () => {
     router.push("/");
   }
 
-  
-
   return (
     <>
       <Head>
@@ -102,75 +97,93 @@ const UserScreen: React.FC<UserScreenProps> = () => {
       <Container
         bg={bgColor[colorMode]}
         color={color[colorMode]}
-        p="4"
-        height="full"
+        pt="20"
+        w="full"
+        flexDir={{ base: "column-reverse", xl: "row" }}
       >
-        <VStack>
-        <Text fontSize="2xl" fontWeight="bold">
-                Activity
-              </Text>
-          <Tabs variant="solid-rounded">
-            <TabList>
-              <Tab
-                m="2"
-                _selected={{ color: "white", bg: HeaderBgColor[colorMode] }}
-              >
-                Posts
-              </Tab>
-              <Tab
-                m="2"
-                _selected={{ color: "white", bg: HeaderBgColor[colorMode] }}
-              >
-                Comments
-              </Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <Box
-                  width={{
-                    base: "90hv",
-                    md: "55em",
-                  }}
-                  p="4"
+        <Box
+          width={{
+            base: "full",
+            md: "55em",
+          }}
+          p="4"
+        >
+          <VStack>
+            <Text fontSize="2xl" fontWeight="bold">
+              Activity
+            </Text>
+            <Tabs
+              m="2"
+              variant="solid-rounded"
+              align="center"
+              width={{
+                base: "full",
+                md: "55em",
+              }}
+              // p="4"
+            >
+              <TabList>
+                <Tab
+                  m="2"
+                  _selected={{ color: "white", bg: HeaderBgColor[colorMode] }}
                 >
-                  <VStack>
-                    {response &&
-                      response.data.submissions.posts.map((post) => {
-                        return <Post key={post.identifier} post={post} />;
-                      })}
-                  </VStack>
-                </Box>
-              </TabPanel>
-              <TabPanel>
-                <Box
-                  width={{
-                    base: "100hv",
-                    md: "55em",
-                  }}
-                  p="4"
+                  Posts
+                </Tab>
+                <Tab
+                  m="2"
+                  _selected={{ color: "white", bg: HeaderBgColor[colorMode] }}
                 >
-                  <VStack>
-                    {response.data.submissions.comments.map((comment) => (
-                      <CommentOnSubmission
-                        title={comment.post.title as string}
-                        subName={comment.post.subName}
-                        comment={comment as any}
-                        postSlug={comment.post.slug as string}
-                        key={comment.identifier}
-                        postIdentifier={comment.post.identifier as string}
-                      />
-                    ))}
-                  </VStack>
-                </Box>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </VStack>
+                  Comments
+                </Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Box>
+                    <VStack>
+                      {response &&
+                        response.data.submissions.posts.map((post) => {
+                          return (
+                            <Skeleton
+                              key={post.identifier}
+                              w="full"
+                              isLoaded={!isLoading}
+                            >
+                              <Post post={post} />
+                            </Skeleton>
+                          );
+                        })}
+                    </VStack>
+                  </Box>
+                </TabPanel>
+                <TabPanel>
+                  <Box>
+                    <VStack>
+                      {response.data.submissions.comments.map((comment) => (
+                        <CommentOnSubmission
+                          title={comment.post.title as string}
+                          subName={comment.post.subName}
+                          comment={comment as any}
+                          postSlug={comment.post.slug as string}
+                          key={comment.identifier}
+                          postIdentifier={comment.post.identifier as string}
+                        />
+                      ))}
+                    </VStack>
+                  </Box>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </VStack>
+        </Box>
+
         <Center
+        al
           // border="1px"
+          // display={{ base: "none" }}
           rounded="lg"
-          w="sm"
+          w={{base: "full", md: "sm"}}
           h="sm"
+          p="2"
           border="1px"
           borderColor={color[colorMode]}
         >
