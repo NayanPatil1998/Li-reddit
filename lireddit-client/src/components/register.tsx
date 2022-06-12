@@ -59,12 +59,16 @@ const Register: React.FC<RegisterProps> = ({}) => {
           <Box px={{ base: "6", md: "0" }}>
             <Form>
               <InputTextField
+            // @ts-ignore
+
                 name="username"
                 placeholder="Enter Username"
                 label="Username"
                 required
               />
               <InputTextField
+            // @ts-ignore
+
                 name="email"
                 placeholder="Enter Email"
                 label="Email"
@@ -72,6 +76,8 @@ const Register: React.FC<RegisterProps> = ({}) => {
                 required
               />
               <InputTextField
+            // @ts-ignore
+
                 name="password"
                 placeholder="Enter Password"
                 label="Password"

@@ -205,6 +205,8 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             />
             <Spacer width="5" />
             <CreateSub
+            // @ts-ignore
+
               display={{
                 base: "none",
                 md: "block",
@@ -234,6 +236,8 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
                     justifyContent="center"
                     onClick={() => {
                       mutate(
+            // @ts-ignore
+
                         {},
                         {
                           onSuccess: (data) => {
@@ -259,6 +263,8 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
                   <MenuItem
                     onClick={() => {
                       mutate(
+            // @ts-ignore
+
                         {},
                         {
                           onSuccess: (data) => {

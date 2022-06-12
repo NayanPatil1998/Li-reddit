@@ -152,6 +152,8 @@ const CreatePost: React.FC<CreatePostProps> = () => {
                   <Form>
                     <Box position="relative">
                       <InputTextField
+                        // @ts-ignore
+
                         name="title"
                         placeholder="EnterTitle"
                         label="Title"
@@ -163,6 +165,8 @@ const CreatePost: React.FC<CreatePostProps> = () => {
                     </Box>
 
                     <InputTextField
+                      // @ts-ignore
+
                       name="body"
                       placeholder="Enter body"
                       label="Body"

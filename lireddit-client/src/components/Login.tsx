@@ -64,11 +64,13 @@ const Login: React.FC<LoginProps> = ({}) => {
           <Box px={{base: "6", md:"0"}}>
             <Form >
             <InputTextField
+            // @ts-ignore
               name="emailOrUsername"
               placeholder="Enter Username or Email"
               label="Username or Email"
             />
             <InputTextField
+            // @ts-ignore
               name="password"
               placeholder="Enter Password"
               label="Password"

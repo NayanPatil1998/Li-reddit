@@ -4,7 +4,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 const ormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   // url: process.env.DATABASE_URL,
-  database: 'lireddit2',
+  database: 'lireddit',
   username: 'nayan',
   password: "9604",
   logging: true,
