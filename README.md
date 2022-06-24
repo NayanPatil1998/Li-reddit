@@ -77,7 +77,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Image Alt]()](https://www.youtube.com/watch?v=hwZvpWYOjFo&t=8s)
+[![Image Alt](https://raw.githubusercontent.com/NayanPatil1998/Li-reddit/main/reddit_thumb.png)](https://www.youtube.com/watch?v=hwZvpWYOjFo&t=8s)
 
 
 Lireddit is Reddit like mobile responsive Social Platform. Users can create an account and log into their account, can create Subreddits, posts, also upvote, downvote posts and comments etc.
