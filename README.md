@@ -77,7 +77,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<iframe width="400" height="240" src="https://www.youtube.com/embed/hwZvpWYOjFo" title="Lireddit - Reddit Clone built using PERN stack with Chakra UI, TypeORM, Chakra UI, Redis" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Image Alt]()](https://www.youtube.com/watch?v=hwZvpWYOjFo&t=8s)
+
 
 Lireddit is Reddit like mobile responsive Social Platform. Users can create an account and log into their account, can create Subreddits, posts, also upvote, downvote posts and comments etc.
 
